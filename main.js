@@ -1,131 +1,168 @@
-const maxPokedex = 807 // Only has pictures up to 802 and 807 is the current max
-let apiData = {}, pokemonDiv, tempPokeData, pokedexID
+const maxPokedex = 807; // Only has pictures up to 802 and 807 is the current max
+let apiData = {}, pokemonDiv, tempPokeData, pokedexID, score = 0, total = 0;
 
-function init() {
-    const html = ''
-    pokemonDiv = document.querySelector('.pokedex')
-    pokemonDiv.innerHTML = html
-    pokedexID = Math.floor(Math.random() * Math.floor(maxPokedex));
-}
+(function () {
 
-document.querySelector('.newPokemon').addEventListener('click', () => {
+    // Selectors
+    const newPokemon = document.querySelector('.newPokemon');
+    const guessUsingImage = document.querySelector('.guessUsingImage');
+    const guessUsingStats = document.querySelector('.guessUsingStats');
+    const guessedPokemon = document.getElementById("guessedPokemon");
+    const correctScore = document.getElementById("correctScore");
+    const guessedTotal = document.getElementById("guessedTotal");
+    const countDown = document.getElementById("countdown");
+    const countDownNumber = document.getElementById('countdown-number');
 
-    init()
-
-    apiData = {
-        url: 'https://pokeapi.co/api/v2/',
-        type: 'pokemon',
-        id: pokedexID
+    // Methods
+    const getRandomID = () => {
+        pokedexID = Math.floor(Math.random() * Math.floor(maxPokedex));
     }
 
-    const {url, type, id} = apiData
-    const apiUrl = `${url}${type}/${id}`
+    function startTimer() {
+        let countdown = 30;
 
-    fetch(apiUrl)
-        .then( (data) => data.json() )
-        .then( (pokemon) => generateHTML(pokemon) )
-        // .then( (pokemon) => borderColor(pokemon) )
+        countDownNumber.textContent = countdown;
+        countDown.style.display = 'block';
 
-    document.querySelector('.guessInput').style.display = 'none';
-})
-
-document.querySelector('.guessUsingImage').addEventListener('click', () => {
-
-    init()
-
-    apiData = {
-        url: 'https://pokeapi.co/api/v2/',
-        type: 'pokemon',
-        id: pokedexID
+        setTimeout(generateImage, 30000);
     }
 
-    const {url, type, id} = apiData
-    const apiUrl = `${url}${type}/${id}`
+    const generateNewPokemon = () => {
+        getRandomID()
 
-    fetch(apiUrl)
-        .then( (data) => data.json() )
-        .then( (pokemon) => getPokemonImage(pokemon) )
+        apiData = {
+            url: 'https://pokeapi.co/api/v2/',
+            type: 'pokemon',
+            id: pokedexID
+        }
 
-    document.querySelector('.guessInput').style.display = 'block';
+        const {url, type, id} = apiData
+        const apiUrl = `${url}${type}/${id}`
 
-})
+        fetch(apiUrl)
+            .then( (data) => data.json() )
+            .then( (pokemon) => generateHTML(pokemon) )
+            // .then( (pokemon) => borderColor(pokemon) )
 
-document.querySelector('.guessUsingStats').addEventListener('click', () => {
-
-    init()
-
-    apiData = {
-        url: 'https://pokeapi.co/api/v2/',
-        type: 'pokemon',
-        id: pokedexID
+        document.querySelector('.guessInput').style.display = 'none';
     }
 
-    const {url, type, id} = apiData
-    const apiUrl = `${url}${type}/${id}`
+    const generateImage = () => {
+        getRandomID()
 
-    fetch(apiUrl)
-        .then( (data) => data.json() )
-        .then( (pokemon) => getPokemonStats(pokemon) )
+        apiData = {
+            url: 'https://pokeapi.co/api/v2/',
+            type: 'pokemon',
+            id: pokedexID
+        }
 
-    document.querySelector('.guessInput').style.display = 'block';
-})
+        const {url, type, id} = apiData
+        const apiUrl = `${url}${type}/${id}`
 
-const generateHTML = (data) => {
-    const html = `
-        <div class="name">${data.name}</div>
-        <img src=${data.sprites.front_default}>
-        <div class="details">
-            <span>Height: ${data.height}</span>
-            <span>Weight: ${data.weight}</span>
-        </div>
-    `
-    pokemonDiv = document.querySelector('.pokedex')
-    pokemonDiv.innerHTML = html
-}
+        fetch(apiUrl)
+            .then( (data) => data.json() )
+            .then( (pokemon) => getPokemonImage(pokemon) )
 
-const getPokemonImage = (data) => {
-    tempPokeData = data
-    const html = `
-        <img src=${data.sprites.front_default}>
-    `
-    pokemonDiv = document.querySelector('.pokedex')
-    pokemonDiv.innerHTML = html
-}
-
-const getPokemonStats = (data) => {
-    tempPokeData = data
-    let statistics = ``
-    let pokeTypes = ``, types = ``
-    for(let i=0; i < data.stats.length; i++) {
-        statistics += `<div>${data.stats[i].stat.name}: ${data.stats[i].base_stat}</div>`
+        document.querySelector('.guessInput').style.display = 'block';
+        countDown.style.display = 'none';
+        startTimer();
     }
-    for(let i=0; i < data.types.length; i++) {
-        pokeTypes += `${data.types[i].type.name}, `
-        if (pokeTypes.endsWith(", ")) {
-            types = pokeTypes.substring(0, pokeTypes.length - 2);
+
+    const generateStats = () => {
+        getRandomID()
+
+        apiData = {
+            url: 'https://pokeapi.co/api/v2/',
+            type: 'pokemon',
+            id: pokedexID
+        }
+
+        const {url, type, id} = apiData
+        const apiUrl = `${url}${type}/${id}`
+
+        fetch(apiUrl)
+            .then( (data) => data.json() )
+            .then( (pokemon) => getPokemonStats(pokemon) )
+
+        document.querySelector('.guessInput').style.display = 'block';
+    }
+
+    const generateHTML = (data) => {
+        const html = `
+            <div class="name">${data.name}</div>
+            <img src=${data.sprites.front_default}>
+            <div class="details">
+                <span>Height: ${data.height}</span>
+                <span>Weight: ${data.weight}</span>
+            </div>
+        `
+        pokemonDiv = document.querySelector('.pokedex')
+        pokemonDiv.innerHTML = html
+    }
+
+    const getPokemonImage = (data) => {
+        tempPokeData = data
+        console.log(tempPokeData.name)
+        const html = `
+            <img src=${data.sprites.front_default}>
+        `
+        pokemonDiv = document.querySelector('.pokedex')
+        pokemonDiv.innerHTML = html
+    }
+
+    const getPokemonStats = (data) => {
+        tempPokeData = data
+        let statistics = ``
+        let pokeTypes = ``, types = ``
+        for(let i=0; i < data.stats.length; i++) {
+            statistics += `<div>${data.stats[i].stat.name}: ${data.stats[i].base_stat}</div>`
+        }
+        for(let i=0; i < data.types.length; i++) {
+            pokeTypes += `${data.types[i].type.name}, `
+            if (pokeTypes.endsWith(", ")) {
+                types = pokeTypes.substring(0, pokeTypes.length - 2);
+            }
+        }
+        const html = `
+            <div class="stats">
+                <div>Stats</div>
+                ${statistics}
+                <div>Type: ${types}</div>
+                <span>Height: ${data.height}</span>
+                <span>Weight: ${data.weight}</span>
+            </div>
+        `
+        pokemonDiv = document.querySelector('.pokedex')
+        pokemonDiv.innerHTML = html
+    }
+
+    pokemonGuess = () => {
+        total += 1
+        if(guessedPokemon.value.toLowerCase() === tempPokeData.name.toLowerCase()) {
+            score += 1;
+            correctScore.textContent = score;
+            guessedTotal.textContent = total;
+            correctScore.style.color = 'green';
+            generateImage();
+        } else {
+            guessedTotal.textContent = total;
+            guessedTotal.style.color = 'red';
         }
     }
-    const html = `
-        <div class="stats">
-            <div>Stats</div>
-            ${statistics}
-            <div>Type: ${types}</div>
-            <span>Height: ${data.height}</span>
-            <span>Weight: ${data.weight}</span>
-        </div>
-    `
-    pokemonDiv = document.querySelector('.pokedex')
-    pokemonDiv.innerHTML = html
-}
 
-function pokemonGuess() {
-    const guess = document.getElementById("guessedPokemon").value
-    if(guess.toLowerCase() === tempPokeData.name.toLowerCase()) {
-        console.log("CORRECT")
-    } else {
-        console.log("TRY AGAIN")
+    // Events/API/Init
+    function init() {
+        correctScore = 0;
+        guessedTotal = 0;
+        const html = '';
+        pokemonDiv = document.querySelector('.pokedex');
+        pokemonDiv.innerHTML = html;
     }
-}
+
+    newPokemon.addEventListener('click', generateNewPokemon)
+    guessUsingImage.addEventListener('click', generateImage)
+    guessUsingStats.addEventListener('click', generateStats)
+})();
 
 // function borderColor(pokemon) {
 //     const typeColor = [
