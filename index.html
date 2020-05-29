@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="style.css" />
+        <title>PokeDex</title>
+    </head>
+    <body>
+        <h1 class="title">Who's That Pokemon??</h1>
+        <div class="gameTypes">
+            <button class="newPokemon">Generate</button>
+            <button class="guessUsingImage">Guess Based on Image</button>
+            <button class="guessUsingStats">Guess Based on Stats</button>
+        </div>
+
+        <div class="pokedex">
+
+        </div>
+        <form id="form" class="guessInput" action="main.js">
+            <input class="userGuess" type="text" id="guessedPokemon"/>
+            <input type="button" placeholder="Enter Your Answer..." onclick="pokemonGuess()" value="Submit">
+        </form>
+
+        <script type="text/javascript" src="main.js"></script>
+    </body>
+</html>

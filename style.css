@@ -1,0 +1,51 @@
+body {
+    background-color: #ebf5f0;
+}
+
+.title {
+    text-align: center;
+}
+
+.gameTypes {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.pokedex {
+    margin: auto;
+    width: 20rem;
+    height: 20rem;
+    border: 5px solid black;
+    background-color: lightgray;
+}
+
+.userGuess {
+    margin: auto;
+}
+
+.guessInput {
+    display: none;
+}
+
+/*
+normal: #a8a878
+water: #6890f0
+electric: #f8d030
+fighting: #c03028
+ground: #e0c068
+psychic: #f85888
+rock: #b8a038
+dark: #705848
+steel: #b8b8d0
+fire: #f08030
+grass: #78c850
+ice: #98d8d8
+poison: #a040a0
+flying: #a890f0
+bug: #a8b820
+ghost: #705898
+dragon: #7038f8
+fairy: #f0b6bc
+*/
